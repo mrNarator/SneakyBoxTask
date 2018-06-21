@@ -1,2 +1,2 @@
 # SneakyBoxTask
-Task fos sneakyBox internship
+Task for sneakyBox internship> Kinda Sims room editor
