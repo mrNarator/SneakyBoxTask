@@ -13,7 +13,6 @@ public class InputController : MonoBehaviour {
     private InputField width;
     [SerializeField]
     private GameObject tiles;
-    [SerializeField]
 
     private GameObject floor;
     private GameObject eastWall;
