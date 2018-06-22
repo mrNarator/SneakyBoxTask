@@ -361,17 +361,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 403225e38c9c1d443b2716a306ad3c7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  woodMaterial: {fileID: 2100000, guid: a8d06dd659a4f054e923d33d598fec0f, type: 2}
+  metalMaterial: {fileID: 2100000, guid: e53404c0ccdc9034fb1377f8f76b4ed2, type: 2}
+  swagMaterial: {fileID: 2100000, guid: b05909a6044c8364d92e7742613d7c0b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: a749e079584de6f4cb6a6ee3ce7b7e7a, type: 2}
+  objectOffsetY: -2.5
+  objectOffsetX: -5
+  objectOffsetZ: 14
+  matOffsetX: -3.5
+  matOffsetY: -2
+  matOffsetZ: 14
   rotationSensitivity: 1.5
   dragSensitivity: 7
   zoomSpeed: 5
   smooth: 1
-  thingy: {fileID: 1523192360251964, guid: 1b0c79b40000b734fa238083fe38200a, type: 2}
   rayLength: 50
-  layermask:
+  layermaskWall:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 256
+  layermaskItem:
+    serializedVersion: 2
+    m_Bits: 512
   carriedObjectRotationSpeed: 10
-  objectDistanceFromTheCamera: 10
+  thingy: {fileID: 1523192360251964, guid: 1b0c79b40000b734fa238083fe38200a, type: 2}
 --- !u!1 &139832369
 GameObject:
   m_ObjectHideFlags: 0
