@@ -234,6 +234,11 @@ public class MouseRotation : MonoBehaviour {
             selected.RemoveFirst();
         }
     }
+
+
+    /// <summary>
+    /// Render and select materials
+    /// </summary>
     void renderMaterialsSelection()
     {
         mat1.transform.position = transform.position + transform.forward * matOffsetY + transform.right * matOffsetX + transform.up * matOffsetZ;
@@ -268,44 +273,55 @@ public class MouseRotation : MonoBehaviour {
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, rayLength, layermaskWall))
+        if (!Physics.Raycast(ray, rayLength, layermaskItem))
         {
-            // object size constants
-            float objectSizeX = o.GetComponent<Renderer>().bounds.extents.x;
-            float objectSizeY = o.GetComponent<Renderer>().bounds.extents.y;
-            float objectSizeZ = o.GetComponent<Renderer>().bounds.extents.z;
-
-            //reset rotation
-            o.transform.rotation = new Quaternion();
-            //new position on wall/floor
-            o.transform.position = new Vector3(
-                hit.transform.position.x + hit.normal.x * objectSizeX, 
-                hit.transform.position.y + hit.normal.y * objectSizeY, 
-                hit.transform.position.z + hit.normal.z * objectSizeZ
-                );
-
-            if(Input.GetMouseButtonDown(0))
+            if (Physics.Raycast(ray, out hit, rayLength, layermaskWall))
             {
-                
-                GameObject carriedThingy = Instantiate(thingy, 
-                    new Vector3 (
-                        hit.transform.position.x + hit.normal.x * objectSizeX, 
-                        hit.transform.position.y + hit.normal.y * objectSizeY,
-                        hit.transform.position.z + hit.normal.z * objectSizeZ
-                    ), o.transform.rotation, addedObjects.transform);
+                // object size constants
+                float objectSizeX = o.GetComponent<Renderer>().bounds.extents.x;
+                float objectSizeY = o.GetComponent<Renderer>().bounds.extents.y;
+                float objectSizeZ = o.GetComponent<Renderer>().bounds.extents.z;
 
-                carriedThingy.tag = "temp";
-                carriedThingy.layer = LayerMask.NameToLayer("items");
-                carriedThingy.GetComponent<Renderer>().material = defaultMaterial;
-                Destroy(o);
-                haveObject = false;
+                //reset rotation
+                o.transform.rotation = new Quaternion();
+                //new position on wall/floor
+                o.transform.position = new Vector3(
+                    hit.transform.position.x + hit.normal.x * objectSizeX,
+                    hit.transform.position.y + hit.normal.y * objectSizeY,
+                    hit.transform.position.z + hit.normal.z * objectSizeZ
+                    );
+
+                if (Input.GetMouseButtonDown(0))
+                {
+
+                    GameObject carriedThingy = Instantiate(thingy,
+                        new Vector3(
+                            hit.transform.position.x + hit.normal.x * objectSizeX,
+                            hit.transform.position.y + hit.normal.y * objectSizeY,
+                            hit.transform.position.z + hit.normal.z * objectSizeZ
+                        ), o.transform.rotation, addedObjects.transform);
+
+                    carriedThingy.tag = "temp";
+                    carriedThingy.layer = LayerMask.NameToLayer("items");
+                    carriedThingy.GetComponent<Renderer>().material = defaultMaterial;
+                    Destroy(o);
+                    haveObject = false;
+                }
+            }
+
+            //if cursor is not on the room
+            else
+            {
+                o.transform.position = transform.position + transform.forward * objectOffsetY + transform.right * objectOffsetX + transform.up * objectOffsetZ;
+                o.transform.Rotate(new Vector3(Time.deltaTime * carriedObjectRotationSpeed, 0, 0));
+
             }
         }
         //if cursor is not on the room
         else
         {
             o.transform.position = transform.position + transform.forward * objectOffsetY + transform.right * objectOffsetX + transform.up * objectOffsetZ;
-            o.transform.Rotate(new Vector3(Time.deltaTime*carriedObjectRotationSpeed, 0, 0));
+            o.transform.Rotate(new Vector3(Time.deltaTime * carriedObjectRotationSpeed, 0, 0));
 
         }
     }

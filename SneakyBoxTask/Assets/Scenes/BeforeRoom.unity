@@ -536,11 +536,11 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Navigation:\nLeft Mouse Click -> Drag yourself around the scene\n(disabled
-    on editing)\nScroll Wheel -> zoom in and zoom out\nMiddle Mouse Button Click ->
-    Reset camera position\n\n\"E\"  (enter object placing mode)\nLeft Mouse Click
-    Places object on the scene\nand returns to navagtion.\n\n\"W\" (enter material
-    selection mode)\nLeft Mouse Click selects placed objects which \nLMC Click on
-    material will apply the latter\n\n\nEsc -> leave the game\n"
+    on editing)\nRight Mouse Click -> Rotate view\nScroll Wheel -> zoom in and zoom
+    out\nMiddle Mouse Button Click -> Reset camera position\n\n\"E\"  (enter object
+    placing mode)\nLeft Mouse Click Places object on the scene\nand returns to navagtion.\n\n\"W\"
+    (enter material selection mode)\nLeft Mouse Click selects placed objects which
+    \nLMC Click on material will apply the latter\n\n\nEsc -> leave the game\n"
 --- !u!222 &271418260
 CanvasRenderer:
   m_ObjectHideFlags: 0
