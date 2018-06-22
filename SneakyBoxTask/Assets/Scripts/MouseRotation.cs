@@ -34,9 +34,11 @@ public class MouseRotation : MonoBehaviour {
     public float rayLength;
     public LayerMask layermask;
     public float carriedObjectRotationSpeed = 10f;
-    public float objectDistanceFromTheCamera = 7f;
+    public float objectOffsetY = 7f;
+    public float objectOffsetX = 7f;
+    public float objectOffsetZ = 7f;
 
-    GameObject addedObjects;
+    public GameObject addedObjects;
     void Start()
     {
         ResetCameraP = transform.position;
@@ -112,7 +114,12 @@ public class MouseRotation : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            GameObject carriedThingy = Instantiate(thingy, new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z), transform.rotation, addedObjects.transform);
+            GameObject carriedThingy = Instantiate(thingy, 
+                new Vector3(
+                    Input.mousePosition.x, 
+                    Input.mousePosition.y, 
+                    Input.mousePosition.z
+                    ), transform.rotation, addedObjects.transform);
             haveObject = true;
             return carriedThingy;
         }
@@ -125,11 +132,38 @@ public class MouseRotation : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, rayLength, layermask))
         {
-            o.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z );
+            float objectSizeX = o.GetComponent<Renderer>().bounds.extents.x;
+            float objectSizeY = o.GetComponent<Renderer>().bounds.extents.y;
+            float objectSizeZ = o.GetComponent<Renderer>().bounds.extents.z;
+
+            //rester rotation
+            o.transform.rotation = new Quaternion();
+            //new position on wall/floor
+            o.transform.position = new Vector3(
+                hit.transform.position.x + hit.normal.x * objectSizeX, 
+                hit.transform.position.y + hit.normal.y * objectSizeY, 
+                hit.transform.position.z + hit.normal.z * objectSizeZ
+                );
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                
+                GameObject carriedThingy = Instantiate(thingy, 
+                    new Vector3 (
+                        hit.transform.position.x + hit.normal.x * objectSizeX, 
+                        hit.transform.position.y + hit.normal.y * objectSizeY,
+                        hit.transform.position.z + hit.normal.z * objectSizeZ
+                    ), o.transform.rotation, addedObjects.transform);
+
+                carriedThingy.tag = "temp";
+                Destroy(o);
+                haveObject = false;
+            }
         }
+        //if cursor is not on the room
         else
         {
-            o.transform.position = transform.position + transform.forward * objectDistanceFromTheCamera;
+            o.transform.position = transform.position + transform.forward * objectOffsetY + transform.right * objectOffsetX + transform.up * objectOffsetZ;
             o.transform.Rotate(new Vector3(Time.deltaTime*carriedObjectRotationSpeed, 0, 0));
 
         }

@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class ObjectController : MonoBehaviour {
 
-	// Use this for initialization
+    bool haveObject;
+    GameObject thingy;
 	void Start () {
 		
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		
+		if(haveObject)
+        {
+            carry(thingy);
+        }
+        else
+        {
+            create();
+        }
 	}
+
+    void create()
+    {
+        if(Input.GetKeyDown (KeyCode.E))
+    }
 }

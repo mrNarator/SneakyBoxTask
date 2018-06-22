@@ -371,7 +371,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   carriedObjectRotationSpeed: 10
-  objectDistanceFromTheCamera: 5
+  objectDistanceFromTheCamera: 10
 --- !u!1 &139832369
 GameObject:
   m_ObjectHideFlags: 0
