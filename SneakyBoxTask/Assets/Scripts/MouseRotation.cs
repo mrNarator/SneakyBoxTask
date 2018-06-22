@@ -46,6 +46,8 @@ public class MouseRotation : MonoBehaviour {
     [SerializeField]
     LayerMask layermaskItem;
     [SerializeField]
+    LayerMask layermaskMats;
+    [SerializeField]
     float carriedObjectRotationSpeed = 10f;
     [SerializeField]
     GameObject thingy;
@@ -64,7 +66,7 @@ public class MouseRotation : MonoBehaviour {
     public LinkedList<GameObject> selected;
 
     bool haveObject;
-    bool materialChange;
+    bool materialSelection;
     GameObject carriedObject;
     GameObject addedObjects;
 
@@ -93,11 +95,20 @@ public class MouseRotation : MonoBehaviour {
         mat2.GetComponent<Renderer>().material = metalMaterial;
         mat3.GetComponent<Renderer>().material = swagMaterial;
 
+        mat1.layer = LayerMask.NameToLayer("mats");
+        mat2.layer = LayerMask.NameToLayer("mats");
+        mat3.layer = LayerMask.NameToLayer("mats");
+
         mats.SetActive(false);
 
     }
     void Update()
     {
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         // if you have object place it, if you dont create it
         if (haveObject)
         {
@@ -108,14 +119,14 @@ public class MouseRotation : MonoBehaviour {
                 haveObject = false;
             }
         }
-        else if (materialChange)
+        else if (materialSelection)
         {
             //select for material change
             select();
             renderMaterialsSelection();
             if (Input.GetKeyDown(KeyCode.W))
             {
-                materialChange = false;
+                materialSelection = false;
                 mats.SetActive(false);
                 removeSelect();
             }
@@ -130,7 +141,7 @@ public class MouseRotation : MonoBehaviour {
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
-                materialChange= true;
+                materialSelection= true;
                 mats.SetActive(true);
             }
         }
@@ -147,7 +158,7 @@ public class MouseRotation : MonoBehaviour {
         }
 
         // if you are handling object, disable camera drag
-        if (!haveObject&&!materialChange)
+        if (!haveObject&&!materialSelection)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -184,7 +195,7 @@ public class MouseRotation : MonoBehaviour {
     }
 
 
-    // creates object that can be placed on walls or floor
+    /// creates object that can be placed on walls or floor
     GameObject create()
     {
         removeSelect();
@@ -213,7 +224,7 @@ public class MouseRotation : MonoBehaviour {
         }
     }
 
-    //remove selected list of items for material change
+    ///remove selected list of items for material change
     void removeSelect()
     {
         while (selected.Count != 0)
@@ -232,8 +243,27 @@ public class MouseRotation : MonoBehaviour {
         mat1.transform.Rotate(new Vector3(Time.deltaTime * carriedObjectRotationSpeed, 0, 0));
         mat2.transform.Rotate(new Vector3(Time.deltaTime * carriedObjectRotationSpeed, 0, 0));
         mat3.transform.Rotate(new Vector3(Time.deltaTime * carriedObjectRotationSpeed, 0, 0));
+
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, rayLength, layermaskMats))
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Material mat = hit.transform.gameObject.GetComponent<Renderer>().material;
+
+                while (selected.Count != 0)
+                {
+                    GameObject temp = selected.First.Value;
+                    temp.transform.gameObject.GetComponent<Renderer>().material = mat;
+                    selected.RemoveFirst();
+                }
+                materialSelection = false;
+                mats.SetActive(false);
+            }
+        }
     } 
-    // controls object carrying and placement
+    /// controls object carrying and placement
     void carry(GameObject o)
     {
         RaycastHit hit;
